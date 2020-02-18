@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+Welcome to GR-review!
+{% endblock %}
+
+{% block body %}
+<!-- login -->
+<form class="form-inline" action="{{ url_for('login') }}" method="post">
+  <div class="form-group">
+    <label class="sr-only" for="InputLogin">Login</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="InputLogin" name="login" placeholder="Login">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="InputPassword">Password</label>
+    <input type="password" class="form-control mb-2 mr-sm-2" id="InputPassword" name="password" placeholder="Password">
+  </div>
+  <button type="submit" class="btn btn-primary mb-2 mr-sm-2">Log In</button>
+</form>
+
+<!-- Registration -->
+<form class="form-inline" action="{{ url_for('register') }}" method="post">
+  <div class="form-group">
+    <label class="sr-only" for="InputLogin">Login</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="InputLogin" name="login" placeholder="Login">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="InputPassword">Password</label>
+    <input type="password" class="form-control mb-2 mr-sm-2" id="InputPassword" name="password" placeholder="Password">
+  </div>
+  <button type="submit" class="btn btn-secondary mb-2 mr-sm-2">Register</button>
+</form>
+{% endblock %}
