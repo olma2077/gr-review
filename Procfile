@@ -1,1 +1,1 @@
-web: gunicorn application.py:gr-review
+web: gunicorn application:app
