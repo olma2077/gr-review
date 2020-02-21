@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+<div class="row">
+<p class="col-6">Welcome, {{ user }}!</p>
+<form class="form-inline col-6" action="{{ url_for('logout') }}" method="post">
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary">Log Out</button>
+  </div>
+</form>
+</div>
+<hr>
+{% endblock %}
