@@ -12,6 +12,9 @@ app = Flask(__name__)
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
     raise RuntimeError("DATABASE_URL is not set")
+if not os.getenv("GR_KEY"):
+    raise RuntimeError("GR_KEY is not set")
+
 
 # Configure session to use filesystem
 app.config["SESSION_PERMANENT"] = False
@@ -79,8 +82,8 @@ def search():
 def book(book_isbn):
     book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
         {"isbn": book_isbn}).fetchone()
-    # goodreads = 
-    return render_template("book.html", user=session['user'], book=book)
+    gr = goodreads.fetch_review_counts(os.getenv("GR_KEY"), book_isbn)
+    return render_template("book.html", user=session['user'], book=book, goodreads=gr)
 
 @app.route("/book/<book_isbn>/comment", methods=["POST"])
 def comment(book_isbn): 
