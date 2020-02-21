@@ -1,5 +1,6 @@
 import os
 import hashlib
+import goodreads
 
 from flask import Flask, session, render_template, request
 from flask_session.__init__ import Session
@@ -72,4 +73,15 @@ def search():
     author = request.form.get("author")
     books = db.execute("SELECT * FROM books WHERE isbn like :isbn and author like :author and title like :title",
         {"isbn": '%'+isbn+'%', "author": '%'+author+'%', "title": '%'+title+'%'}).fetchall()
-    return  render_template("search.html", user=session['user'], books=books)
+    return render_template("search.html", user=session['user'], books=books)
+
+@app.route("/book/<book_isbn>")
+def book(book_isbn):
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
+        {"isbn": book_isbn}).fetchone()
+    # goodreads = 
+    return render_template("book.html", user=session['user'], book=book)
+
+@app.route("/book/<book_isbn>/comment", methods=["POST"])
+def comment(book_isbn): 
+    return render_template("success.html", success=request.form.get("comment"))
