@@ -67,4 +67,9 @@ def logout():
 
 @app.route("/search", methods=["POST"])
 def search():
-    pass
+    isbn = request.form.get("isbn")
+    title = request.form.get("title")
+    author = request.form.get("author")
+    books = db.execute("SELECT * FROM books WHERE isbn like :isbn and author like :author and title like :title",
+        {"isbn": '%'+isbn+'%', "author": '%'+author+'%', "title": '%'+title+'%'}).fetchall()
+    return  render_template("search.html", user=session['user'], books=books)
