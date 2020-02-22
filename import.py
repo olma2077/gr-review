@@ -18,14 +18,24 @@ db.execute('CREATE TABLE books ('
             'author VARCHAR NOT NULL, '
             'year VARCHAR NOT NULL);')
  """
-if engine.dialect.has_table(engine, 'users'):
+""" if engine.dialect.has_table(engine, 'users'):
     db.execute('DROP TABLE users;')
 
 db.execute('CREATE TABLE users ('
             'id SERIAL PRIMARY KEY, '
             'name VARCHAR NOT NULL, '
             'password VARCHAR NOT NULL, '
-            'salt VARCHAR NOT NULL);')
+            'salt VARCHAR NOT NULL);') """
+
+if engine.dialect.has_table(engine, 'reviews'):
+    db.execute('DROP TABLE reviews;')
+
+db.execute('CREATE TABLE reviews ('
+            'id SERIAL PRIMARY KEY, '
+            'user_id INT REFERENCES users(id), '
+            'book_id INT REFERENCES books(id), '
+            'rating SMALLINT NOT NULL, '
+            'review VARCHAR NOT NULL);')
 
 """ f = open("books.csv")
 reader = csv.reader(f)

@@ -45,6 +45,7 @@ def login():
     password = request.form.get("password")
     if hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), bytes.fromhex(salt), 100000) == bytes.fromhex(key):
         session['user'] = login
+        session['user_id'] = db.execute("SELECT id FROM users WHERE name = :name", {"name": login}).fetchone().id
         return render_template("search.html", user=session['user'])
     else:
         return render_template("error.html", error="Login or password are incorrect!")
@@ -67,6 +68,7 @@ def register():
 @app.route("/logout", methods=["POST"])
 def logout():
     session.pop('user', None)
+    session.pop('user_id', None)
     return render_template("index.html")
 
 @app.route("/search", methods=["POST"])
@@ -82,9 +84,20 @@ def search():
 def book(book_isbn):
     book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
         {"isbn": book_isbn}).fetchone()
+    reviews = db.execute("SELECT * FROM reviews JOIN users on reviews.user_id = users.id WHERE reviews.book_id = :id",
+        {"id": book.id}).fetchall()
     gr = goodreads.fetch_review_counts(os.getenv("GR_KEY"), book_isbn)
-    return render_template("book.html", user=session['user'], book=book, goodreads=gr)
+    return render_template("book.html", user=session['user'], book=book, goodreads=gr, reviews=reviews)
 
-@app.route("/book/<book_isbn>/comment", methods=["POST"])
-def comment(book_isbn): 
-    return render_template("success.html", success=request.form.get("comment"))
+@app.route("/book/<book_id>/review", methods=["POST"])
+def review(book_id):
+    if db.execute("SELECT FROM reviews WHERE book_id = :book and user_id = :user", 
+                    {"book": book_id, "user": session['user_id']}).rowcount == 0:
+        rating = request.form.get("rating")
+        review = request.form.get("review")
+        db.execute("INSERT INTO reviews (book_id, user_id, rating, review) VALUES (:book_id, :user_id, :rating, :review)",
+            {"book_id": book_id, "user_id": session['user_id'], "rating": rating, "review": review})
+        db.commit()
+        return render_template("success.html", success="Your review was submitted!")
+    else:
+        return render_template("error.html", error="You've already reviewed this book!")

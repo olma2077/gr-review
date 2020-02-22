@@ -1,5 +1,13 @@
-CS50W first project using Pyton, Flask and PostgreSQL@Heroku.
+CS50W first project using Pyton, Flask, PostgreSQL@Heroku and integration with GoodReads API to fetch review counts. No ORM used for this project as prescribed by task.S
 
-Trivial review site with GoodReads as data provider.
+Trivial review site with books' sample DB.
 
-User is able to register and log in.
+User is able to:
+* Register.
+* Log in/log out.
+* Search boks by (partial) ISBN, author or title.
+* View book page with basic information including review counts and average review from GoodReads.
+* Check rating and reviews, posted by +local+ users.
+* Post own rating and review (one per book).
+
+Public API is also available to fetch some book data.
