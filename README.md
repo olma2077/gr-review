@@ -10,4 +10,6 @@ User is able to:
 * Check rating and reviews, posted by __local__ users.
 * Post own rating and review (one per book).
 
-Public API is also available to fetch some book data.
+Public API at /api/<isbn> is also available to fetch some book data.
+
+Hosted on https://gr-review.herokuapp.com/

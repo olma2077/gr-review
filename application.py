@@ -2,7 +2,7 @@ import os
 import hashlib
 import goodreads
 
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, jsonify
 from flask_session.__init__ import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -101,3 +101,23 @@ def review(book_id):
         return render_template("success.html", success="Your review was submitted!")
     else:
         return render_template("error.html", error="You've already reviewed this book!")
+
+@app.route("/api/<isbn>")
+def get_book(isbn):
+    """ Return details about a book by ISBN """
+
+    book = book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
+        {"isbn": isbn}).fetchone()
+    
+    if book is None:
+        return jsonify({"error": "Book is not found"}), 404
+
+    gr = goodreads.fetch_review_counts(os.getenv("GR_KEY"), isbn)
+    return jsonify({
+            "title": book.title,
+            "author": book.author,
+            "year": book.year,
+            "isbn": isbn,
+            "review_count": gr.reviews_count,
+            "average_score": gr.average_rating
+        })
