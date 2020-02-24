@@ -1,4 +1,4 @@
-CS50W first project using Pyton, Flask, PostgreSQL@Heroku and integration with GoodReads API to fetch review counts. No ORM used for this project as prescribed by task.
+CS50W first project using Pyton, Flask, PostgreSQL with deployment at Heroku and integration with GoodReads API to fetch review counts. No ORM used for this project as prescribed by task.
 
 Trivial review site with books' sample DB.
 
